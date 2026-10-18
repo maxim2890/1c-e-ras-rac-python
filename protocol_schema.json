@@ -1,0 +1,5844 @@
+{
+  "provenance": "Derived wire schema from python-rac 0.7.1 (MIT). Native 8.3.18/8.3.22 confirms selected codecs and layouts; other entries remain reference-derived. See THIRD_PARTY_NOTICES.txt and MODERN_ANALYSIS.md.",
+  "records": {
+    "RegUserInfo": {
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10,
+          "rac": "name"
+        },
+        {
+          "name": "descr",
+          "type": "string",
+          "since": 10,
+          "rac": "descr"
+        },
+        {
+          "name": "password",
+          "type": "string",
+          "since": 10,
+          "note": "пароль открытым текстом (в запросе). В ответе — U+FFFD, если пароль у администратора задан. При повторной регистрации того же имени: U+FFFD оставляет прежний пароль, пустая строка сбрасывает пароль (живой RAS 8.5.1, одинаково при версиях 10.0 и 16.0)"
+        },
+        {
+          "name": "passwordAuthAllowed",
+          "type": "bool",
+          "since": 10,
+          "rac": "auth=pwd"
+        },
+        {
+          "name": "sysAuthAllowed",
+          "type": "bool",
+          "since": 10,
+          "rac": "auth=os"
+        },
+        {
+          "name": "sysUserName",
+          "type": "string",
+          "since": 10,
+          "rac": "os-user"
+        }
+      ]
+    },
+    "PortRangeInfo": {
+      "fields": [
+        {
+          "name": "highBound",
+          "type": "uint16",
+          "since": 10,
+          "note": "в проводе идёт первым (rac показывает low:high)"
+        },
+        {
+          "name": "lowBound",
+          "type": "uint16",
+          "since": 10
+        }
+      ]
+    },
+    "ClusterInfo": {
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "cluster"
+        },
+        {
+          "name": "expirationTimeout",
+          "type": "int32",
+          "since": 10,
+          "rac": "expiration-timeout"
+        },
+        {
+          "name": "hostName",
+          "type": "string",
+          "since": 10,
+          "rac": "host"
+        },
+        {
+          "name": "lifeTimeLimit",
+          "type": "int32",
+          "since": 10,
+          "rac": "lifetime-limit",
+          "note": "RAS не применяет (устарело)"
+        },
+        {
+          "name": "mainPort",
+          "type": "uint16",
+          "since": 10,
+          "rac": "port"
+        },
+        {
+          "name": "maxMemorySize",
+          "type": "int32",
+          "since": 10,
+          "rac": "max-memory-size",
+          "note": "RAS не применяет (устарело)"
+        },
+        {
+          "name": "maxMemoryTimeLimit",
+          "type": "int32",
+          "since": 10,
+          "rac": "max-memory-time-limit",
+          "note": "RAS не применяет (устарело)"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10,
+          "rac": "name"
+        },
+        {
+          "name": "securityLevel",
+          "type": "int32",
+          "since": 10,
+          "rac": "security-level"
+        },
+        {
+          "name": "sessionFaultToleranceLevel",
+          "type": "int32",
+          "since": 10,
+          "rac": "session-fault-tolerance-level"
+        },
+        {
+          "name": "loadBalancingMode",
+          "type": "int32",
+          "since": 10,
+          "rac": "load-balancing-mode",
+          "enum": {
+            "0": "performance",
+            "1": "memory"
+          }
+        },
+        {
+          "name": "clusterRecyclingErrorsCountThreshold",
+          "type": "int32",
+          "since": 10,
+          "rac": "errors-count-threshold",
+          "note": "RAS не применяет (устарело)"
+        },
+        {
+          "name": "clusterRecyclingKillProblemProcesses",
+          "type": "bool",
+          "since": 10,
+          "rac": "kill-problem-processes"
+        },
+        {
+          "name": "clusterRecyclingKillByMemoryWithDump",
+          "type": "bool",
+          "since": 10,
+          "rac": "kill-by-memory-with-dump",
+          "since_confirmed": true
+        },
+        {
+          "name": "unknownInt32",
+          "type": "int32",
+          "since": 14,
+          "source": "live-ras-8.5.1",
+          "note": "наблюдается всегда 1 (в pyrac — «маркер аудита»); назначение неизвестно",
+          "opaque": true,
+          "default": 1,
+          "since_confirmed": true
+        },
+        {
+          "name": "allowAccessRightAuditEventsRecording",
+          "type": "bool",
+          "since": 15,
+          "rac": "allow-access-right-audit-events-recording",
+          "source": "live-ras-8.5.1",
+          "since_confirmed": true
+        },
+        {
+          "name": "pingPeriod",
+          "type": "int32",
+          "since": 15,
+          "rac": "ping-period",
+          "source": "live-ras-8.5.1",
+          "note": "при записи записью более старой версии RAS сбрасывает в -1",
+          "since_confirmed": true
+        },
+        {
+          "name": "pingTimeout",
+          "type": "int32",
+          "since": 15,
+          "rac": "ping-timeout",
+          "source": "live-ras-8.5.1",
+          "since_confirmed": true
+        },
+        {
+          "name": "restartSchedule",
+          "type": "string",
+          "since": 15,
+          "rac": "restart-schedule",
+          "source": "live-ras-8.5.1",
+          "note": "обычная строка (без префикса 00). В запросе 15 значение применяется только при версии 16.0: при 15.0 запрос принимается, но расписание не меняется (живой RAS)",
+          "since_confirmed": true
+        },
+        {
+          "name": "protocol22UnknownInt32A",
+          "type": "int32",
+          "since": 22,
+          "source": "live-ras-8.3.27.2342",
+          "opaque": true
+        },
+        {
+          "name": "protocol22UnknownUint8",
+          "type": "uint8",
+          "since": 22,
+          "source": "live-ras-8.3.27.2342",
+          "opaque": true
+        },
+        {
+          "name": "protocol22UnknownInt32B",
+          "type": "int32",
+          "since": 22,
+          "source": "live-ras-8.3.27.2342",
+          "opaque": true
+        },
+        {
+          "name": "protocol22UnknownUint16",
+          "type": "uint16",
+          "since": 22,
+          "source": "live-ras-8.3.27.2342",
+          "opaque": true
+        }
+      ]
+    },
+    "ClusterManagerInfo": {
+      "fields": [
+        {
+          "name": "managerId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "manager"
+        },
+        {
+          "name": "descr",
+          "type": "string",
+          "since": 10,
+          "rac": "descr"
+        },
+        {
+          "name": "hostName",
+          "type": "string",
+          "since": 10,
+          "rac": "host"
+        },
+        {
+          "name": "mainManager",
+          "type": "int32",
+          "since": 10,
+          "rac": "using",
+          "enum": {
+            "0": "normal",
+            "1": "main"
+          }
+        },
+        {
+          "name": "mainPort",
+          "type": "uint16",
+          "since": 10,
+          "rac": "port"
+        },
+        {
+          "name": "pid",
+          "type": "string",
+          "since": 10,
+          "rac": "pid"
+        }
+      ]
+    },
+    "WorkingServerInfo": {
+      "fields": [
+        {
+          "name": "workingServerId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "server"
+        },
+        {
+          "name": "hostName",
+          "type": "string",
+          "since": 10,
+          "rac": "agent-host"
+        },
+        {
+          "name": "mainPort",
+          "type": "uint16",
+          "since": 10,
+          "rac": "agent-port"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10,
+          "rac": "name"
+        },
+        {
+          "name": "mainServer",
+          "type": "bool",
+          "since": 10,
+          "rac": "using",
+          "note": "true = main"
+        },
+        {
+          "name": "safeWorkingProcessesMemoryLimit",
+          "type": "int64",
+          "since": 10,
+          "rac": "safe-working-processes-memory-limit",
+          "note": "RAS не применяет"
+        },
+        {
+          "name": "safeCallMemoryLimit",
+          "type": "int64",
+          "since": 10,
+          "rac": "safe-call-memory-limit"
+        },
+        {
+          "name": "infoBasesPerWorkingProcessLimit",
+          "type": "int32",
+          "since": 10,
+          "rac": "infobases-limit"
+        },
+        {
+          "name": "workingProcessMemoryLimit",
+          "type": "int64",
+          "since": 10,
+          "rac": "memory-limit",
+          "note": "RAS не применяет"
+        },
+        {
+          "name": "connectionsPerWorkingProcessLimit",
+          "type": "int32",
+          "since": 10,
+          "rac": "connections-limit"
+        },
+        {
+          "name": "clusterMainPort",
+          "type": "uint16",
+          "since": 10,
+          "rac": "cluster-port"
+        },
+        {
+          "name": "dedicatedManagers",
+          "type": "bool",
+          "since": 10,
+          "rac": "dedicate-managers",
+          "note": "true = all"
+        },
+        {
+          "name": "portRanges",
+          "type": "list<PortRangeInfo>",
+          "since": 10,
+          "rac": "port-range"
+        },
+        {
+          "name": "criticalProcessesTotalMemory",
+          "type": "int64",
+          "since": 10,
+          "rac": "critical-total-memory",
+          "since_confirmed": true
+        },
+        {
+          "name": "temporaryAllowedProcessesTotalMemory",
+          "type": "int64",
+          "since": 10,
+          "rac": "temporary-allowed-total-memory",
+          "since_confirmed": true
+        },
+        {
+          "name": "temporaryAllowedProcessesTotalMemoryTimeLimit",
+          "type": "int64",
+          "since": 10,
+          "rac": "temporary-allowed-total-memory-time-limit",
+          "since_confirmed": true
+        },
+        {
+          "name": "servicePrincipalName",
+          "type": "string",
+          "since": 11,
+          "rac": "service-principal-name",
+          "source": "live-ras-8.5.1",
+          "since_confirmed": true
+        },
+        {
+          "name": "unknownByte",
+          "type": "uint8",
+          "since": 12,
+          "source": "live-ras-8.5.1",
+          "note": "наблюдается всегда 0, в том числе при непустом расписании; назначение неизвестно (в pyrac читается как «пустая строка расписания»)",
+          "opaque": true,
+          "default": 0,
+          "since_confirmed": true
+        },
+        {
+          "name": "restartSchedule",
+          "type": "string",
+          "since": 16,
+          "rac": "restart-schedule",
+          "source": "live-ras-8.5.1",
+          "since_confirmed": true
+        },
+        {
+          "name": "protocol22UnknownBoolA",
+          "type": "bool",
+          "since": 22,
+          "source": "live-ras-8.3.27.2342",
+          "opaque": true
+        },
+        {
+          "name": "protocol22UnknownInt32",
+          "type": "int32",
+          "since": 22,
+          "source": "live-ras-8.3.27.2342",
+          "opaque": true
+        },
+        {
+          "name": "protocol22UnknownBoolB",
+          "type": "bool",
+          "since": 22,
+          "source": "live-ras-8.3.27.2342",
+          "opaque": true
+        }
+      ]
+    },
+    "LicenseInfo": {
+      "fields": [
+        {
+          "name": "fullName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "fullPresentation",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "issuedByServer",
+          "type": "bool",
+          "since": 10
+        },
+        {
+          "name": "licenseType",
+          "type": "int32",
+          "since": 10
+        },
+        {
+          "name": "maxUsersAll",
+          "type": "int32",
+          "since": 10
+        },
+        {
+          "name": "maxUsersCur",
+          "type": "int32",
+          "since": 10
+        },
+        {
+          "name": "net",
+          "type": "bool",
+          "since": 10
+        },
+        {
+          "name": "rmngrAddress",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "rmngrPid",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "rmngrPort",
+          "type": "int32",
+          "since": 10
+        },
+        {
+          "name": "series",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "shortPresentation",
+          "type": "string",
+          "since": 10
+        }
+      ]
+    },
+    "WorkingProcessInfo": {
+      "fields": [
+        {
+          "name": "processId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "process"
+        },
+        {
+          "name": "avgBackCallTime",
+          "type": "double",
+          "since": 10,
+          "rac": "avg-back-call-time"
+        },
+        {
+          "name": "avgCallTime",
+          "type": "double",
+          "since": 10,
+          "rac": "avg-call-time"
+        },
+        {
+          "name": "avgDBCallTime",
+          "type": "double",
+          "since": 10,
+          "rac": "avg-db-call-time"
+        },
+        {
+          "name": "avgLockCallTime",
+          "type": "double",
+          "since": 10,
+          "rac": "avg-lock-call-time"
+        },
+        {
+          "name": "avgServerCallTime",
+          "type": "double",
+          "since": 10,
+          "rac": "avg-server-call-time"
+        },
+        {
+          "name": "avgThreads",
+          "type": "double",
+          "since": 10,
+          "rac": "avg-threads"
+        },
+        {
+          "name": "capacity",
+          "type": "int32",
+          "since": 10,
+          "rac": "capacity"
+        },
+        {
+          "name": "connections",
+          "type": "int32",
+          "since": 10,
+          "rac": "connections"
+        },
+        {
+          "name": "hostName",
+          "type": "string",
+          "since": 10,
+          "rac": "host"
+        },
+        {
+          "name": "enable",
+          "type": "bool",
+          "since": 10,
+          "rac": "turned-on"
+        },
+        {
+          "name": "licenses",
+          "type": "list<LicenseInfo>",
+          "since": 10,
+          "rac": "license",
+          "note": "счётчик (size, 7 бит на байт) + записи LicenseInfo; pyrac разбирает список целиком (число лицензий наружу, без названий)"
+        },
+        {
+          "name": "mainPort",
+          "type": "uint16",
+          "since": 10,
+          "rac": "port"
+        },
+        {
+          "name": "memoryExcessTime",
+          "type": "int32",
+          "since": 10,
+          "rac": "memory-excess-time"
+        },
+        {
+          "name": "memorySize",
+          "type": "int32",
+          "since": 10,
+          "rac": "memory-size"
+        },
+        {
+          "name": "pid",
+          "type": "string",
+          "since": 10,
+          "rac": "pid"
+        },
+        {
+          "name": "running",
+          "type": "int32",
+          "since": 10,
+          "rac": "running",
+          "note": "1 = процесс запущен"
+        },
+        {
+          "name": "selectionSize",
+          "type": "int32",
+          "since": 10,
+          "rac": "selection-size"
+        },
+        {
+          "name": "startedAt",
+          "type": "datetime",
+          "since": 10,
+          "rac": "started-at"
+        },
+        {
+          "name": "use",
+          "type": "int32",
+          "since": 10,
+          "rac": "use",
+          "enum": {
+            "0": "not-used",
+            "1": "used",
+            "2": "auto"
+          }
+        },
+        {
+          "name": "availablePerfomance",
+          "type": "int32",
+          "since": 10,
+          "rac": "available-perfomance"
+        },
+        {
+          "name": "reserve",
+          "type": "bool",
+          "since": 10,
+          "rac": "reserve",
+          "since_confirmed": true
+        }
+      ]
+    },
+    "ClusterServiceInfo": {
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10,
+          "rac": "name"
+        },
+        {
+          "name": "descr",
+          "type": "string",
+          "since": 10,
+          "rac": "descr"
+        },
+        {
+          "name": "mainOnly",
+          "type": "int32",
+          "since": 10,
+          "rac": "main-only"
+        },
+        {
+          "name": "clusterManagerIds",
+          "type": "list<uuid>",
+          "since": 10,
+          "rac": "manager",
+          "note": "счётчик (size, 7 бит на байт) + UUID; pyrac разбирает список целиком (первый менеджер в manager, при нескольких — все в managers)"
+        },
+        {
+          "name": "protocol22UnknownInt32",
+          "type": "int32",
+          "since": 22,
+          "source": "live-ras-8.3.27.2342",
+          "opaque": true,
+          "observed_default": -1
+        }
+      ]
+    },
+    "InfoBaseInfoShort": {
+      "fields": [
+        {
+          "name": "infoBaseId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "infobase"
+        },
+        {
+          "name": "descr",
+          "type": "string",
+          "since": 10,
+          "rac": "descr"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10,
+          "rac": "name"
+        }
+      ]
+    },
+    "InfoBaseInfo": {
+      "fields": [
+        {
+          "name": "infoBaseId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "infobase"
+        },
+        {
+          "name": "dateOffset",
+          "type": "int32",
+          "since": 10,
+          "rac": "date-offset"
+        },
+        {
+          "name": "dbms",
+          "type": "string",
+          "since": 10,
+          "rac": "dbms"
+        },
+        {
+          "name": "dbName",
+          "type": "string",
+          "since": 10,
+          "rac": "db-name"
+        },
+        {
+          "name": "dbPassword",
+          "type": "string",
+          "since": 10,
+          "rac": "db-pwd",
+          "note": "секрет"
+        },
+        {
+          "name": "dbServerName",
+          "type": "string",
+          "since": 10,
+          "rac": "db-server"
+        },
+        {
+          "name": "dbUser",
+          "type": "string",
+          "since": 10,
+          "rac": "db-user"
+        },
+        {
+          "name": "deniedFrom",
+          "type": "datetime",
+          "since": 10,
+          "rac": "denied-from"
+        },
+        {
+          "name": "deniedMessage",
+          "type": "string",
+          "since": 10,
+          "rac": "denied-message"
+        },
+        {
+          "name": "deniedParameter",
+          "type": "string",
+          "since": 10,
+          "rac": "denied-parameter"
+        },
+        {
+          "name": "deniedTo",
+          "type": "datetime",
+          "since": 10,
+          "rac": "denied-to"
+        },
+        {
+          "name": "descr",
+          "type": "string",
+          "since": 10,
+          "rac": "descr"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "since": 10,
+          "rac": "locale"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10,
+          "rac": "name"
+        },
+        {
+          "name": "permissionCode",
+          "type": "string",
+          "since": 10,
+          "rac": "permission-code",
+          "note": "секрет"
+        },
+        {
+          "name": "scheduledJobsDenied",
+          "type": "bool",
+          "since": 10,
+          "rac": "scheduled-jobs-deny"
+        },
+        {
+          "name": "securityLevel",
+          "type": "int32",
+          "since": 10,
+          "rac": "security-level"
+        },
+        {
+          "name": "sessionsDenied",
+          "type": "bool",
+          "since": 10,
+          "rac": "sessions-deny"
+        },
+        {
+          "name": "licenseDistributionAllowed",
+          "type": "int32",
+          "since": 10,
+          "rac": "license-distribution",
+          "enum": {
+            "0": "deny",
+            "1": "allow"
+          }
+        },
+        {
+          "name": "externalSessionManagerConnectionString",
+          "type": "string",
+          "since": 10,
+          "rac": "external-session-manager-connection-string",
+          "note": "секрет"
+        },
+        {
+          "name": "externalSessionManagerRequired",
+          "type": "bool",
+          "since": 10,
+          "rac": "external-session-manager-required"
+        },
+        {
+          "name": "securityProfileName",
+          "type": "string",
+          "since": 10,
+          "rac": "security-profile-name"
+        },
+        {
+          "name": "safeModeSecurityProfileName",
+          "type": "string",
+          "since": 10,
+          "rac": "safe-mode-security-profile-name"
+        },
+        {
+          "name": "reserveWorkingProcesses",
+          "type": "bool",
+          "since": 10,
+          "rac": "reserve-working-processes",
+          "since_confirmed": true
+        },
+        {
+          "name": "disableLocalSpeechToText",
+          "type": "bool",
+          "since": 13,
+          "rac": "disable-local-speech-to-text",
+          "source": "pyrac-16.0",
+          "note": "версия появления установлена по длине ответа на сообщение 48 при версиях 3..16 (живой RAS 8.5.1.1343): с 13 запись длиннее на 1 байт",
+          "since_confirmed": true
+        },
+        {
+          "name": "infoBaseTailPadding",
+          "type": "bytes3",
+          "since": 14,
+          "source": "pyrac-16.0",
+          "note": "3 байта 00 (выравнивание); с версии 14, 12 байт хвоста вместе с тремя числами; в схеме `opaque` (ключ `_infoBaseTailPadding`)",
+          "since_confirmed": true,
+          "opaque": true
+        },
+        {
+          "name": "configurationUnloadDelayByWorkingProcessWithoutActiveUsers",
+          "type": "uint32le",
+          "since": 14,
+          "rac": "configuration-unload-delay-by-working-process-without-active-users",
+          "source": "pyrac-16.0",
+          "since_confirmed": true
+        },
+        {
+          "name": "minimumScheduledJobsStartPeriodWithoutActiveUsers",
+          "type": "uint32le",
+          "since": 14,
+          "rac": "minimum-scheduled-jobs-start-period-without-active-users",
+          "source": "pyrac-16.0",
+          "since_confirmed": true
+        },
+        {
+          "name": "maximumScheduledJobsStartShiftWithoutActiveUsers",
+          "type": "uint8",
+          "since": 14,
+          "rac": "maximum-scheduled-jobs-start-shift-without-active-users",
+          "source": "pyrac-16.0",
+          "since_confirmed": true
+        }
+      ]
+    },
+    "InfoBaseConnectionShort": {
+      "fields": [
+        {
+          "name": "infoBaseConnectionId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "connection"
+        },
+        {
+          "name": "application",
+          "type": "string",
+          "since": 10,
+          "rac": "application"
+        },
+        {
+          "name": "blockedByLs",
+          "type": "int32",
+          "since": 10,
+          "rac": "blocked-by-ls"
+        },
+        {
+          "name": "connectedAt",
+          "type": "datetime",
+          "since": 10,
+          "rac": "connected-at"
+        },
+        {
+          "name": "connId",
+          "type": "int32",
+          "since": 10,
+          "rac": "conn-id"
+        },
+        {
+          "name": "host",
+          "type": "string",
+          "since": 10,
+          "rac": "host"
+        },
+        {
+          "name": "infoBaseId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "infobase"
+        },
+        {
+          "name": "workingProcessId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "process"
+        },
+        {
+          "name": "sessionNumber",
+          "type": "int32",
+          "since": 10,
+          "rac": "session-number"
+        }
+      ]
+    },
+    "InfoBaseConnectionInfo": {
+      "fields": [
+        {
+          "name": "infoBaseConnectionId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "connection"
+        },
+        {
+          "name": "appId",
+          "type": "string",
+          "since": 10,
+          "rac": "app-id"
+        },
+        {
+          "name": "blockedByDbms",
+          "type": "int32",
+          "since": 10,
+          "rac": "blocked-by-dbms"
+        },
+        {
+          "name": "bytesAll",
+          "type": "int64",
+          "since": 10,
+          "rac": "bytes-all"
+        },
+        {
+          "name": "bytesLast5Min",
+          "type": "int64",
+          "since": 10,
+          "rac": "bytes-last-5min"
+        },
+        {
+          "name": "callsAll",
+          "type": "int64",
+          "since": 10,
+          "note": "на проводе int64, в Java приводится к int",
+          "rac": "calls-all"
+        },
+        {
+          "name": "callsLast5Min",
+          "type": "int64",
+          "since": 10,
+          "rac": "calls-last-5min"
+        },
+        {
+          "name": "connectedAt",
+          "type": "datetime",
+          "since": 10,
+          "rac": "connected-at"
+        },
+        {
+          "name": "connId",
+          "type": "int32",
+          "since": 10,
+          "rac": "conn-id"
+        },
+        {
+          "name": "dbConnMode",
+          "type": "int32",
+          "since": 10,
+          "rac": "db-conn-mode",
+          "enum": {
+            "0": "none",
+            "2": "exclusive"
+          },
+          "note": "наблюдались 0 (none) и 2 (exclusive); значение 1 не наблюдалось"
+        },
+        {
+          "name": "dbmsBytesAll",
+          "type": "int64",
+          "since": 10,
+          "rac": "dbms-bytes-all"
+        },
+        {
+          "name": "dbmsBytesLast5Min",
+          "type": "int64",
+          "since": 10,
+          "rac": "dbms-bytes-last-5min"
+        },
+        {
+          "name": "dbProcInfo",
+          "type": "string",
+          "since": 10,
+          "rac": "db-proc-info"
+        },
+        {
+          "name": "dbProcTook",
+          "type": "int32",
+          "since": 10,
+          "rac": "db-proc-took"
+        },
+        {
+          "name": "dbProcTookAt",
+          "type": "datetime",
+          "since": 10,
+          "rac": "db-proc-took-at"
+        },
+        {
+          "name": "durationAll",
+          "type": "int32",
+          "since": 10,
+          "rac": "duration-all"
+        },
+        {
+          "name": "durationAllDbms",
+          "type": "int32",
+          "since": 10,
+          "rac": "duration-all-dbms"
+        },
+        {
+          "name": "durationCurrent",
+          "type": "int32",
+          "since": 10,
+          "rac": "duration-current"
+        },
+        {
+          "name": "durationCurrentDbms",
+          "type": "int32",
+          "since": 10,
+          "rac": "duration-current-dbms"
+        },
+        {
+          "name": "durationLast5Min",
+          "type": "int64",
+          "since": 10,
+          "rac": "duration-last-5min"
+        },
+        {
+          "name": "durationLast5MinDbms",
+          "type": "int64",
+          "since": 10,
+          "rac": "duration-last-5min-dbms"
+        },
+        {
+          "name": "hostName",
+          "type": "string",
+          "since": 10,
+          "rac": "host"
+        },
+        {
+          "name": "ibConnMode",
+          "type": "int32",
+          "since": 10,
+          "rac": "ib-conn-mode",
+          "enum": {
+            "0": "shared",
+            "1": "exclusive"
+          },
+          "note": "значения 0 и 1 наблюдались у живых соединений (shared, exclusive)"
+        },
+        {
+          "name": "threadMode",
+          "type": "int32",
+          "since": 10,
+          "rac": "thread-mode",
+          "enum": {
+            "0": "client"
+          },
+          "note": "наблюдалось только 0 (client)"
+        },
+        {
+          "name": "userName",
+          "type": "string",
+          "since": 10,
+          "rac": "user-name"
+        },
+        {
+          "name": "memoryCurrent",
+          "type": "int64",
+          "since": 10,
+          "rac": "memory-current",
+          "since_confirmed": true
+        },
+        {
+          "name": "memoryLast5Min",
+          "type": "int64",
+          "since": 10,
+          "rac": "memory-last-5min",
+          "since_confirmed": true
+        },
+        {
+          "name": "memoryTotal",
+          "type": "int64",
+          "since": 10,
+          "rac": "memory-total",
+          "since_confirmed": true
+        },
+        {
+          "name": "readBytesCurrent",
+          "type": "int64",
+          "since": 10,
+          "rac": "read-current",
+          "since_confirmed": true
+        },
+        {
+          "name": "readBytesLast5Min",
+          "type": "int64",
+          "since": 10,
+          "rac": "read-last-5min",
+          "since_confirmed": true
+        },
+        {
+          "name": "readBytesTotal",
+          "type": "int64",
+          "since": 10,
+          "rac": "read-total",
+          "since_confirmed": true
+        },
+        {
+          "name": "writeBytesCurrent",
+          "type": "int64",
+          "since": 10,
+          "rac": "write-current",
+          "since_confirmed": true
+        },
+        {
+          "name": "writeBytesLast5Min",
+          "type": "int64",
+          "since": 10,
+          "rac": "write-last-5min",
+          "since_confirmed": true
+        },
+        {
+          "name": "writeBytesTotal",
+          "type": "int64",
+          "since": 10,
+          "rac": "write-total",
+          "since_confirmed": true
+        },
+        {
+          "name": "durationCurrentService",
+          "type": "int32",
+          "since": 10,
+          "rac": "duration-current-service",
+          "source": "live-ras-8.5.1",
+          "since_confirmed": true
+        },
+        {
+          "name": "durationLast5MinService",
+          "type": "int64",
+          "since": 10,
+          "rac": "duration-last-5min-service",
+          "source": "live-ras-8.5.1",
+          "since_confirmed": true
+        },
+        {
+          "name": "durationAllService",
+          "type": "int32",
+          "since": 10,
+          "rac": "duration-all-service",
+          "source": "live-ras-8.5.1",
+          "since_confirmed": true
+        },
+        {
+          "name": "currentServiceName",
+          "type": "string",
+          "since": 10,
+          "rac": "current-service-name",
+          "source": "live-ras-8.5.1",
+          "since_confirmed": true
+        }
+      ]
+    },
+    "SessionInfo": {
+      "fields": [
+        {
+          "name": "sid",
+          "type": "uuid",
+          "since": 10,
+          "rac": "session-id"
+        },
+        {
+          "name": "appId",
+          "type": "string",
+          "since": 10,
+          "rac": "app-id"
+        },
+        {
+          "name": "blockedByDbms",
+          "type": "int32",
+          "since": 10,
+          "rac": "blocked-by-dbms"
+        },
+        {
+          "name": "blockedByLs",
+          "type": "int32",
+          "since": 10,
+          "rac": "blocked-by-ls"
+        },
+        {
+          "name": "bytesAll",
+          "type": "int64",
+          "since": 10,
+          "rac": "bytes-all"
+        },
+        {
+          "name": "bytesLast5Min",
+          "type": "int64",
+          "since": 10,
+          "rac": "bytes-last-5min"
+        },
+        {
+          "name": "callsAll",
+          "type": "int32",
+          "since": 10,
+          "rac": "calls-all"
+        },
+        {
+          "name": "callsLast5Min",
+          "type": "int64",
+          "since": 10,
+          "rac": "calls-last-5min"
+        },
+        {
+          "name": "connectionId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "connection"
+        },
+        {
+          "name": "dbmsBytesAll",
+          "type": "int64",
+          "since": 10,
+          "rac": "dbms-bytes-all"
+        },
+        {
+          "name": "dbmsBytesLast5Min",
+          "type": "int64",
+          "since": 10,
+          "rac": "dbms-bytes-last-5min"
+        },
+        {
+          "name": "dbProcInfo",
+          "type": "string",
+          "since": 10,
+          "rac": "db-proc-info"
+        },
+        {
+          "name": "dbProcTook",
+          "type": "int32",
+          "since": 10,
+          "rac": "db-proc-took"
+        },
+        {
+          "name": "dbProcTookAt",
+          "type": "datetime",
+          "since": 10,
+          "rac": "db-proc-took-at"
+        },
+        {
+          "name": "durationAll",
+          "type": "int32",
+          "since": 10,
+          "rac": "duration-all"
+        },
+        {
+          "name": "durationAllDbms",
+          "type": "int32",
+          "since": 10,
+          "rac": "duration-all-dbms"
+        },
+        {
+          "name": "durationCurrent",
+          "type": "int32",
+          "since": 10,
+          "rac": "duration-current"
+        },
+        {
+          "name": "durationCurrentDbms",
+          "type": "int32",
+          "since": 10,
+          "rac": "duration-current-dbms"
+        },
+        {
+          "name": "durationLast5Min",
+          "type": "int64",
+          "since": 10,
+          "rac": "duration-last-5min"
+        },
+        {
+          "name": "durationLast5MinDbms",
+          "type": "int64",
+          "since": 10,
+          "rac": "duration-last-5min-dbms"
+        },
+        {
+          "name": "host",
+          "type": "string",
+          "since": 10,
+          "rac": "host"
+        },
+        {
+          "name": "infoBaseId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "infobase"
+        },
+        {
+          "name": "lastActiveAt",
+          "type": "datetime",
+          "since": 10,
+          "rac": "last-active-at"
+        },
+        {
+          "name": "hibernate",
+          "type": "bool",
+          "since": 10,
+          "rac": "hibernate"
+        },
+        {
+          "name": "passiveSessionHibernateTime",
+          "type": "int32",
+          "since": 10,
+          "rac": "passive-session-hibernate-time"
+        },
+        {
+          "name": "hibernateSessionTerminateTime",
+          "type": "int32",
+          "since": 10,
+          "rac": "hibernate-session-terminate-time"
+        },
+        {
+          "name": "licenses",
+          "type": "list<LicenseInfo>",
+          "since": 10,
+          "rac": "license"
+        },
+        {
+          "name": "locale",
+          "type": "string",
+          "since": 10,
+          "rac": "locale"
+        },
+        {
+          "name": "workingProcessId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "process"
+        },
+        {
+          "name": "sessionId",
+          "type": "int32",
+          "since": 10,
+          "rac": "session-id (номер)"
+        },
+        {
+          "name": "startedAt",
+          "type": "datetime",
+          "since": 10,
+          "rac": "started-at"
+        },
+        {
+          "name": "userName",
+          "type": "string",
+          "since": 10,
+          "rac": "user-name"
+        },
+        {
+          "name": "memoryCurrent",
+          "type": "int64",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "memoryLast5Min",
+          "type": "int64",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "memoryTotal",
+          "type": "int64",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "readBytesCurrent",
+          "type": "int64",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "readBytesLast5Min",
+          "type": "int64",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "readBytesTotal",
+          "type": "int64",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "writeBytesCurrent",
+          "type": "int64",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "writeBytesLast5Min",
+          "type": "int64",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "writeBytesTotal",
+          "type": "int64",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "durationCurrentService",
+          "type": "int32",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "durationLast5MinService",
+          "type": "int64",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "durationAllService",
+          "type": "int32",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "currentServiceName",
+          "type": "string",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "cpuTimeCurrent",
+          "type": "int64",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "cpuTimeLast5Min",
+          "type": "int64",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "cpuTimeAll",
+          "type": "int64",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "dataSeparation",
+          "type": "string",
+          "since": 10,
+          "since_confirmed": true
+        },
+        {
+          "name": "clientIPAddress",
+          "type": "string",
+          "since": 10,
+          "since_confirmed": true
+        }
+      ]
+    },
+    "ObjectLock": {
+      "fields": [
+        {
+          "name": "connectionId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "connection"
+        },
+        {
+          "name": "lockDescr",
+          "type": "string",
+          "since": 10,
+          "rac": "lock-descr"
+        },
+        {
+          "name": "lockedAt",
+          "type": "datetime",
+          "since": 10,
+          "rac": "locked-at"
+        },
+        {
+          "name": "object",
+          "type": "uuid",
+          "since": 10,
+          "rac": "object"
+        },
+        {
+          "name": "sid",
+          "type": "uuid",
+          "since": 10,
+          "rac": "sid"
+        }
+      ]
+    },
+    "AssignmentRuleInfo": {
+      "fields": [
+        {
+          "name": "assignmentRuleId",
+          "type": "uuid",
+          "since": 10,
+          "rac": "rule"
+        },
+        {
+          "name": "objectType",
+          "type": "string",
+          "since": 10,
+          "rac": "object-type"
+        },
+        {
+          "name": "infoBaseName",
+          "type": "string",
+          "since": 10,
+          "rac": "infobase-name"
+        },
+        {
+          "name": "ruleType",
+          "type": "int32",
+          "since": 10,
+          "rac": "rule-type",
+          "enum": {
+            "0": "never",
+            "1": "auto",
+            "2": "always"
+          }
+        },
+        {
+          "name": "applicationExt",
+          "type": "string",
+          "since": 10,
+          "rac": "application-ext"
+        },
+        {
+          "name": "priority",
+          "type": "int32",
+          "since": 10,
+          "rac": "priority"
+        }
+      ]
+    },
+    "SecurityProfile": {
+      "fields": [
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10,
+          "rac": "name"
+        },
+        {
+          "name": "descr",
+          "type": "string",
+          "since": 10,
+          "rac": "descr"
+        },
+        {
+          "name": "fileSystemFullAccess",
+          "type": "bool",
+          "since": 10,
+          "rac": "directory (полный доступ)"
+        },
+        {
+          "name": "comUseFullAccess",
+          "type": "bool",
+          "since": 10,
+          "rac": "com (полный доступ)"
+        },
+        {
+          "name": "addInUseFullAccess",
+          "type": "bool",
+          "since": 10,
+          "rac": "addin (полный доступ)"
+        },
+        {
+          "name": "externalAppFullAccess",
+          "type": "bool",
+          "since": 10,
+          "rac": "app (полный доступ)"
+        },
+        {
+          "name": "internetUseFullAccess",
+          "type": "bool",
+          "since": 10,
+          "rac": "inet (полный доступ)"
+        },
+        {
+          "name": "safeModeProfile",
+          "type": "bool",
+          "since": 10,
+          "rac": "config"
+        },
+        {
+          "name": "privilegedModeInSafeModeAllowed",
+          "type": "bool",
+          "since": 10,
+          "rac": "priv"
+        },
+        {
+          "name": "unsafeExternalModuleFullAccess",
+          "type": "bool",
+          "since": 10,
+          "rac": "module (полный доступ)"
+        },
+        {
+          "name": "cryptographyAllowed",
+          "type": "bool",
+          "since": 10,
+          "rac": "crypto"
+        },
+        {
+          "name": "rightExtension",
+          "type": "bool",
+          "since": 10,
+          "rac": "right-extension"
+        },
+        {
+          "name": "rightExtensionDefinitionRoles",
+          "type": "string",
+          "since": 10,
+          "rac": "right-extension-definition-roles"
+        },
+        {
+          "name": "allModulesExtension",
+          "type": "bool",
+          "since": 10,
+          "rac": "all-modules-extension"
+        },
+        {
+          "name": "modulesAvailableForExtension",
+          "type": "string",
+          "since": 10,
+          "rac": "modules-available-for-extension"
+        },
+        {
+          "name": "modulesNotAvailableForExtension",
+          "type": "string",
+          "since": 10,
+          "rac": "modules-not-available-for-extension"
+        },
+        {
+          "name": "privilegedModeRoles",
+          "type": "string",
+          "since": 10,
+          "rac": "privileged-mode-roles",
+          "since_confirmed": true
+        }
+      ]
+    },
+    "SecurityProfileVirtualDirectory": {
+      "fields": [
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "alias",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "physicalPath",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "allowedRead",
+          "type": "bool",
+          "since": 10
+        },
+        {
+          "name": "allowedWrite",
+          "type": "bool",
+          "since": 10
+        },
+        {
+          "name": "descr",
+          "type": "string",
+          "since": 10
+        }
+      ]
+    },
+    "SecurityProfileCOMClass": {
+      "fields": [
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "fileName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "objectUuid",
+          "type": "string",
+          "since": 10,
+          "note": "идентификатор класса в виде строки"
+        },
+        {
+          "name": "computerName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "descr",
+          "type": "string",
+          "since": 10
+        }
+      ]
+    },
+    "SecurityProfileAddIn": {
+      "fields": [
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "addInHash",
+          "type": "string",
+          "since": 10,
+          "note": "SHA-1 в Base64"
+        },
+        {
+          "name": "descr",
+          "type": "string",
+          "since": 10
+        }
+      ]
+    },
+    "SecurityProfileExternalModule": {
+      "fields": [
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "moduleHash",
+          "type": "string",
+          "since": 10,
+          "note": "SHA-1 в Base64"
+        },
+        {
+          "name": "descr",
+          "type": "string",
+          "since": 10
+        }
+      ]
+    },
+    "SecurityProfileApplication": {
+      "fields": [
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "commandWild",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "descr",
+          "type": "string",
+          "since": 10
+        }
+      ]
+    },
+    "SecurityProfileInternetResource": {
+      "fields": [
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "address",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "port",
+          "type": "int32",
+          "since": 10
+        },
+        {
+          "name": "protocol",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "descr",
+          "type": "string",
+          "since": 10
+        }
+      ]
+    },
+    "ResourceConsumptionCounter": {
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10,
+          "rac": "name"
+        },
+        {
+          "name": "collectionTime",
+          "type": "int64",
+          "since": 10,
+          "rac": "collection-time",
+          "note": "0 = current-call; иначе секунды"
+        },
+        {
+          "name": "group",
+          "type": "int8",
+          "since": 10,
+          "rac": "group",
+          "enum": {
+            "0": "users",
+            "1": "data-separation"
+          }
+        },
+        {
+          "name": "filterType",
+          "type": "int8",
+          "since": 10,
+          "rac": "filter-type",
+          "enum": {
+            "0": "all-selected",
+            "1": "all-but-selected",
+            "2": "all"
+          }
+        },
+        {
+          "name": "filterValue",
+          "type": "string",
+          "since": 10,
+          "rac": "filter"
+        },
+        {
+          "name": "analyzeDuration",
+          "type": "bool",
+          "since": 10,
+          "rac": "duration"
+        },
+        {
+          "name": "analyzeCpuTime",
+          "type": "bool",
+          "since": 10,
+          "rac": "cpu-time"
+        },
+        {
+          "name": "analyzeDurationDbms",
+          "type": "bool",
+          "since": 10,
+          "rac": "duration-dbms"
+        },
+        {
+          "name": "analyzeDurationService",
+          "type": "bool",
+          "since": 10,
+          "rac": "service"
+        },
+        {
+          "name": "analyzeMemory",
+          "type": "bool",
+          "since": 10,
+          "rac": "memory"
+        },
+        {
+          "name": "analyzeReadBytes",
+          "type": "bool",
+          "since": 10,
+          "rac": "read"
+        },
+        {
+          "name": "analyzeWriteBytes",
+          "type": "bool",
+          "since": 10,
+          "rac": "write"
+        },
+        {
+          "name": "analyzeDbmsBytes",
+          "type": "bool",
+          "since": 10,
+          "rac": "dbms-bytes"
+        },
+        {
+          "name": "analyzeCalls",
+          "type": "bool",
+          "since": 10,
+          "rac": "call"
+        },
+        {
+          "name": "analyzeActiveSessionCount",
+          "type": "bool",
+          "since": 10,
+          "rac": "number-of-active-sessions"
+        },
+        {
+          "name": "analyzeSessionCount",
+          "type": "bool",
+          "since": 10,
+          "rac": "number-of-sessions"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "since": 10,
+          "rac": "descr"
+        }
+      ]
+    },
+    "ResourceConsumptionLimit": {
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10,
+          "rac": "name"
+        },
+        {
+          "name": "counter",
+          "type": "string",
+          "since": 10,
+          "rac": "counter"
+        },
+        {
+          "name": "action",
+          "type": "uint8",
+          "since": 10,
+          "rac": "action",
+          "enum": {
+            "0": "none",
+            "1": "set-low-priority-thread",
+            "2": "interrupt-current-call",
+            "3": "interrupt-session"
+          }
+        },
+        {
+          "name": "duration",
+          "type": "int64",
+          "since": 10,
+          "rac": "duration"
+        },
+        {
+          "name": "cpuTime",
+          "type": "int64",
+          "since": 10,
+          "rac": "cpu-time"
+        },
+        {
+          "name": "durationDbms",
+          "type": "int64",
+          "since": 10,
+          "rac": "duration-dbms"
+        },
+        {
+          "name": "durationService",
+          "type": "int64",
+          "since": 10,
+          "rac": "service"
+        },
+        {
+          "name": "memory",
+          "type": "int64",
+          "since": 10,
+          "rac": "memory"
+        },
+        {
+          "name": "readBytes",
+          "type": "int64",
+          "since": 10,
+          "rac": "read"
+        },
+        {
+          "name": "writeBytes",
+          "type": "int64",
+          "since": 10,
+          "rac": "write"
+        },
+        {
+          "name": "dbmsBytes",
+          "type": "int64",
+          "since": 10,
+          "rac": "dbms-bytes"
+        },
+        {
+          "name": "calls",
+          "type": "int64",
+          "since": 10,
+          "rac": "call"
+        },
+        {
+          "name": "activeSessionCount",
+          "type": "int64",
+          "since": 10,
+          "rac": "number-of-active-sessions"
+        },
+        {
+          "name": "sessionCount",
+          "type": "int64",
+          "since": 10,
+          "rac": "number-of-sessions"
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "since": 10,
+          "rac": "error-message"
+        },
+        {
+          "name": "description",
+          "type": "string",
+          "since": 10,
+          "rac": "descr"
+        }
+      ]
+    },
+    "ResourceConsumptionCounterValue": {
+      "fields": [
+        {
+          "name": "object",
+          "type": "string",
+          "since": 10,
+          "rac": "object"
+        },
+        {
+          "name": "collectionTime",
+          "type": "int64",
+          "since": 10
+        },
+        {
+          "name": "duration",
+          "type": "int64",
+          "since": 10
+        },
+        {
+          "name": "cpuTime",
+          "type": "int64",
+          "since": 10
+        },
+        {
+          "name": "durationDbms",
+          "type": "int64",
+          "since": 10
+        },
+        {
+          "name": "durationService",
+          "type": "int64",
+          "since": 10
+        },
+        {
+          "name": "memory",
+          "type": "int64",
+          "since": 10
+        },
+        {
+          "name": "readBytes",
+          "type": "int64",
+          "since": 10
+        },
+        {
+          "name": "writeBytes",
+          "type": "int64",
+          "since": 10
+        },
+        {
+          "name": "dbmsBytes",
+          "type": "int64",
+          "since": 10
+        },
+        {
+          "name": "calls",
+          "type": "int64",
+          "since": 10
+        },
+        {
+          "name": "activeSessionCount",
+          "type": "int64",
+          "since": 10
+        },
+        {
+          "name": "sessionCount",
+          "type": "int64",
+          "since": 10
+        },
+        {
+          "name": "time",
+          "type": "datetime",
+          "since": 10,
+          "since_confirmed": true
+        }
+      ]
+    },
+    "ServiceSetting": {
+      "fields": [
+        {
+          "name": "setting",
+          "type": "uuid",
+          "since": 16,
+          "rac": "setting",
+          "source": "pyrac-16.0",
+          "since_confirmed": false
+        },
+        {
+          "name": "serviceName",
+          "type": "string",
+          "since": 16,
+          "rac": "service-name",
+          "source": "pyrac-16.0",
+          "since_confirmed": false
+        },
+        {
+          "name": "infoBaseName",
+          "type": "string",
+          "since": 16,
+          "rac": "infobase-name",
+          "source": "pyrac-16.0",
+          "since_confirmed": false
+        },
+        {
+          "name": "serviceDataDir",
+          "type": "string",
+          "since": 16,
+          "rac": "service-data-dir",
+          "source": "pyrac-16.0",
+          "since_confirmed": false
+        },
+        {
+          "name": "active",
+          "type": "bool",
+          "since": 16,
+          "rac": "active",
+          "source": "pyrac-16.0",
+          "since_confirmed": false
+        },
+        {
+          "name": "unknownByte",
+          "type": "uint8",
+          "since": 16,
+          "source": "pyrac-16.0",
+          "note": "всегда 0 (завершающий байт записи)",
+          "since_confirmed": false,
+          "opaque": true,
+          "default": 0
+        }
+      ]
+    },
+    "ServiceDataDirForTransfer": {
+      "fields": [
+        {
+          "name": "serviceName",
+          "type": "string",
+          "since": 16,
+          "source": "pyrac-16.0",
+          "since_confirmed": false
+        },
+        {
+          "name": "infoBaseName",
+          "type": "string",
+          "since": 16,
+          "source": "pyrac-16.0",
+          "since_confirmed": false
+        },
+        {
+          "name": "fromDir",
+          "type": "string",
+          "since": 16,
+          "source": "pyrac-16.0",
+          "since_confirmed": false
+        },
+        {
+          "name": "toDir",
+          "type": "string",
+          "since": 16,
+          "source": "pyrac-16.0",
+          "since_confirmed": false
+        }
+      ]
+    },
+    "BinaryDataStorageInfo": {
+      "fields": [
+        {
+          "name": "storageId",
+          "type": "uuid",
+          "since": 16,
+          "rac": "storage",
+          "source": "live-ras-8.5.1",
+          "since_confirmed": false,
+          "note": "у встроенного хранилища нулевой"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 16,
+          "rac": "name",
+          "source": "live-ras-8.5.1",
+          "since_confirmed": false,
+          "note": "у встроенного хранилища пустое"
+        },
+        {
+          "name": "kind",
+          "type": "int32",
+          "since": 16,
+          "source": "live-ras-8.5.1",
+          "since_confirmed": false,
+          "note": "у встроенного хранилища 1; значения внешних хранилищ не наблюдались"
+        }
+      ]
+    }
+  },
+  "messages": [
+    {
+      "opcode": 0,
+      "name": "GET_AGENT_ADMINS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetAgentAdminsRequest",
+      "fields": [],
+      "response": "opcode:1",
+      "auth": {
+        "requires": [
+          "agent"
+        ],
+        "note": "тип 8 (имя и пароль; пустые имя и пароль — анонимный вход)"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 1,
+      "name": "GET_AGENT_ADMINS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetAgentAdminsResponse",
+      "result": "list<RegUserInfo>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 2,
+      "name": "GET_CLUSTER_ADMINS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetClusterAdminsRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:3",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 3,
+      "name": "GET_CLUSTER_ADMINS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetClusterAdminsResponse",
+      "result": "list<RegUserInfo>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 4,
+      "name": "REG_AGENT_ADMIN_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "RegAgentAdminRequest",
+      "fields": [
+        {
+          "name": "user",
+          "type": "ref:RegUserInfo",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "agent"
+        ],
+        "note": "тип 8 (имя и пароль; пустые имя и пароль — анонимный вход)"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented",
+      "note": "то же, что и для администратора кластера"
+    },
+    {
+      "opcode": 5,
+      "name": "REG_CLUSTER_ADMIN_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "RegClusterAdminRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "user",
+          "type": "ref:RegUserInfo",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented",
+      "note": "изменение существующего администратора — повторная регистрация того же имени (пустой пароль сбрасывает пароль; метка U+FFFD оставляет прежний) по pyrac"
+    },
+    {
+      "opcode": 6,
+      "name": "UNREG_AGENT_ADMIN_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "UnregAgentAdminRequest",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "agent"
+        ],
+        "note": "тип 8 (имя и пароль; пустые имя и пароль — анонимный вход)"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 7,
+      "name": "UNREG_CLUSTER_ADMIN_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "UnregClusterAdminRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 8,
+      "name": "AUTHENTICATE_AGENT_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "AuthenticateAgentRequest",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "password",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [],
+        "note": "сообщение аутентификации"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 9,
+      "name": "AUTHENTICATE_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "AuthenticateRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "password",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [],
+        "note": "сообщение аутентификации"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 10,
+      "name": "ADD_AUTHENTICATION_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "AddAuthenticationRequest",
+      "fields": [
+        {
+          "name": "workingProcessId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "pwd",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [],
+        "note": "сообщение аутентификации"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented",
+      "note": "в Java первое поле называется workingProcessId, но rac 8.5.1 и pyrac передают здесь UUID кластера"
+    },
+    {
+      "opcode": 11,
+      "name": "GET_CLUSTERS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetClustersRequest",
+      "fields": [],
+      "response": "opcode:12",
+      "auth": {
+        "requires": [],
+        "note": "без аутентификации"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 12,
+      "name": "GET_CLUSTERS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetClustersResponse",
+      "result": "list<ClusterInfo>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 13,
+      "name": "GET_CLUSTER_INFO_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetClusterInfoRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:14",
+      "auth": {
+        "requires": [],
+        "note": "без аутентификации"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 14,
+      "name": "GET_CLUSTER_INFO_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetClusterInfoResponse",
+      "result": "ClusterInfo",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 15,
+      "name": "REG_CLUSTER_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "RegClusterRequest",
+      "fields": [
+        {
+          "name": "info",
+          "type": "ref:ClusterInfo",
+          "since": 10
+        }
+      ],
+      "response": "opcode:16",
+      "auth": {
+        "requires": [
+          "agent"
+        ],
+        "note": "тип 8 (имя и пароль; пустые имя и пароль — анонимный вход)"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented",
+      "note": "ответ — UUID кластера (новый или существующий); для нового кластера в записи нулевой UUID"
+    },
+    {
+      "opcode": 16,
+      "name": "REG_CLUSTER_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "RegClusterResponse",
+      "result": "uuid",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 17,
+      "name": "UNREG_CLUSTER_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "UnregClusterRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 18,
+      "name": "GET_CLUSTER_MANAGERS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetClusterManagersRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:19",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 19,
+      "name": "GET_CLUSTER_MANAGERS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetClusterManagersResponse",
+      "result": "list<ClusterManagerInfo>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 20,
+      "name": "GET_CLUSTER_MANAGER_INFO_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetClusterManagerInfoRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "managerId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:21",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 21,
+      "name": "GET_CLUSTER_MANAGER_INFO_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetClusterManagerInfoResponse",
+      "result": "ClusterManagerInfo",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 22,
+      "name": "GET_WORKING_SERVERS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetWorkingServersRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:23",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 23,
+      "name": "GET_WORKING_SERVERS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetWorkingServersResponse",
+      "result": "list<WorkingServerInfo>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 24,
+      "name": "GET_WORKING_SERVER_INFO_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetWorkingServerInfoRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:25",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 25,
+      "name": "GET_WORKING_SERVER_INFO_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetWorkingServerInfoResponse",
+      "result": "WorkingServerInfo",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 26,
+      "name": "REG_WORKING_SERVER_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "RegWorkingServerRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "info",
+          "type": "ref:WorkingServerInfo",
+          "since": 10
+        },
+        {
+          "name": "addProhibitingAssignmentRule",
+          "type": "bool",
+          "since": 14,
+          "source": "live-ras-8.5.1",
+          "rac": "add-prohibiting-assignment-rule"
+        }
+      ],
+      "response": "opcode:27",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented",
+      "note": "ответ — UUID сервера; для нового сервера в записи нулевой UUID; с версии 14 после записи идёт флаг bool add-prohibiting-assignment-rule (живой RAS)"
+    },
+    {
+      "opcode": 27,
+      "name": "REG_WORKING_SERVER_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "RegWorkingServerResponse",
+      "result": "uuid",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 28,
+      "name": "UNREG_WORKING_SERVER_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "UnregWorkingServerRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 29,
+      "name": "GET_WORKING_PROCESSES_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetWorkingProcessesRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:30",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 30,
+      "name": "GET_WORKING_PROCESSES_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetWorkingProcessesResponse",
+      "result": "list<WorkingProcessInfo>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 31,
+      "name": "GET_WORKING_PROCESS_INFO_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetWorkingProcessInfoRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "processId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:32",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 32,
+      "name": "GET_WORKING_PROCESS_INFO_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetWorkingProcessInfoResponse",
+      "result": "WorkingProcessInfo",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 33,
+      "name": "GET_SERVER_WORKING_PROCESSES_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetServerWorkingProcessesRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:34",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 34,
+      "name": "GET_SERVER_WORKING_PROCESSES_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetServerWorkingProcessesResponse",
+      "result": "list<WorkingProcessInfo>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 35,
+      "name": "GET_CLUSTER_SERVICES_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetClusterServicesRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:36",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 36,
+      "name": "GET_CLUSTER_SERVICES_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetClusterServicesResponse",
+      "result": "list<ClusterServiceInfo>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 37,
+      "name": "CREATE_INFOBASE_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "CreateInfoBaseRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "infoBase",
+          "type": "ref:InfoBaseInfo",
+          "since": 10
+        },
+        {
+          "name": "mode",
+          "type": "int32",
+          "since": 10
+        }
+      ],
+      "response": "opcode:38",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented",
+      "note": "mode: 0/1 — создать базу данных (по pyrac и rac)"
+    },
+    {
+      "opcode": 38,
+      "name": "CREATE_INFOBASE_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "CreateInfoBaseResponse",
+      "result": "uuid",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 39,
+      "name": "UPDATE_INFOBASE_SHORT_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "UpdateInfoBaseShortRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "info",
+          "type": "ref:InfoBaseInfoShort",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 40,
+      "name": "UPDATE_INFOBASE_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "UpdateInfoBaseRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "info",
+          "type": "ref:InfoBaseInfo",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "optional": [
+          "infobase"
+        ],
+        "note": "тип 9 и тип 10 (администратор ИБ: UUID кластера, имя, пароль; в Java первый UUID назван workingProcessId)"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 41,
+      "name": "DROP_INFOBASE_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "DropInfoBaseRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "infobaseId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "mode",
+          "type": "int32",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "optional": [
+          "infobase"
+        ],
+        "note": "тип 9 и тип 10 (администратор ИБ: UUID кластера, имя, пароль; в Java первый UUID назван workingProcessId)"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented",
+      "note": "mode: 0 — только регистрация; 1 — удалить базу данных; 2 — очистить базу данных (по pyrac)"
+    },
+    {
+      "opcode": 42,
+      "name": "GET_INFOBASES_SHORT_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBasesShortRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:43",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 43,
+      "name": "GET_INFOBASES_SHORT_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBasesShortResponse",
+      "result": "list<InfoBaseInfoShort>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 44,
+      "name": "GET_INFOBASES_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBasesRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:45",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "optional": [
+          "infobase"
+        ],
+        "note": "тип 9 и тип 10 (администратор ИБ: UUID кластера, имя, пароль; в Java первый UUID назван workingProcessId)"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "полный список информационных баз (запись InfoBaseInfo), проверено на живом RAS: ответ 45 - счётчик и записи"
+    },
+    {
+      "opcode": 45,
+      "name": "GET_INFOBASES_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBasesResponse",
+      "result": "list<InfoBaseInfo>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request",
+      "note": "расшифровано по живому RAS (3 информационные базы): записи InfoBaseInfo идут подряд после счётчика"
+    },
+    {
+      "opcode": 46,
+      "name": "GET_INFOBASE_SHORT_INFO_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBaseShortInfoRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "infobaseId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:47",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 47,
+      "name": "GET_INFOBASE_SHORT_INFO_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBaseShortInfoResponse",
+      "result": "InfoBaseInfoShort",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 48,
+      "name": "GET_INFOBASE_INFO_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBaseInfoReguest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "infobaseId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:49",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "optional": [
+          "infobase"
+        ],
+        "note": "тип 9 и тип 10 (администратор ИБ: UUID кластера, имя, пароль; в Java первый UUID назван workingProcessId)"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 49,
+      "name": "GET_INFOBASE_INFO_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBaseInfoResponse",
+      "result": "InfoBaseInfo",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 50,
+      "name": "GET_CONNECTIONS_SHORT_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetConnectionsShortRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:51",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 51,
+      "name": "GET_CONNECTIONS_SHORT_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetConnectionsShortResponse",
+      "result": "list<InfoBaseConnectionShort>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 52,
+      "name": "GET_INFOBASE_CONNECTIONS_SHORT_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBaseConnectionsShortRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "infobaseId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:53",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 53,
+      "name": "GET_INFOBASE_CONNECTIONS_SHORT_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBaseConnectionsShortResponse",
+      "result": "list<InfoBaseConnectionShort>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 54,
+      "name": "GET_CONNECTION_INFO_SHORT_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetConnectionInfoShortRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "connectionId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:55",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 55,
+      "name": "GET_CONNECTION_INFO_SHORT_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetConnectionInfoShortResponse",
+      "result": "InfoBaseConnectionShort",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 56,
+      "name": "GET_INFOBASE_CONNECTIONS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBaseConnectionsRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "processId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "infobaseId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:57",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "rac connection list --process=P --infobase=I; оригинальный rac перед запросом отправляет аутентификацию 9 и 10; ответ 57 - список InfoBaseConnectionInfo, проверено на живом RAS при версиях 3..16"
+    },
+    {
+      "opcode": 57,
+      "name": "GET_INFOBASE_CONNECTIONS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBaseConnectionsResponse",
+      "result": "list<InfoBaseConnectionInfo>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request",
+      "note": "расшифровано по живому RAS: записи InfoBaseConnectionInfo (с версии 5 с полями службы)"
+    },
+    {
+      "opcode": 64,
+      "name": "DISCONNECT_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "DisconnectRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "processId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "connectionId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "optional": [
+          "infobase"
+        ],
+        "note": "тип 9 и тип 10 (администратор ИБ: UUID кластера, имя, пароль; в Java первый UUID назван workingProcessId)"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 65,
+      "name": "GET_SESSIONS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetSessionsRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:66",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 66,
+      "name": "GET_SESSIONS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetSessionsResponse",
+      "result": "list<SessionInfo>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 67,
+      "name": "GET_INFOBASE_SESSIONS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBaseSessionsRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "infobaseId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:68",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented"
+    },
+    {
+      "opcode": 68,
+      "name": "GET_INFOBASE_SESSIONS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBaseSessionsResponse",
+      "result": "list<SessionInfo>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 69,
+      "name": "GET_SESSION_INFO_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetSessionInfoRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "sid",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:70",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "в Java getType() возвращает GET_SESSIONS_REQUEST (65) — ошибка клиента; реальный номер запроса сведений о сеансе 69 (проверено живым RAS через pyrac)"
+    },
+    {
+      "opcode": 70,
+      "name": "GET_SESSION_INFO_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetSessionInfoResponse",
+      "result": "SessionInfo",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 71,
+      "name": "TERMINATE_SESSION_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "TerminateSessionRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "sid",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "implemented",
+      "note": "Java: перегрузка без message отправляет то же сообщение"
+    },
+    {
+      "opcode": 72,
+      "name": "GET_LOCKS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetLocksRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:73",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 73,
+      "name": "GET_LOCKS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetLocksResponse",
+      "result": "list<ObjectLock>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 74,
+      "name": "GET_INFOBASE_LOCKS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBaseLocksRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "infobaseId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:75",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 75,
+      "name": "GET_INFOBASE_LOCKS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInfoBaseLocksResponse",
+      "result": "list<ObjectLock>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 76,
+      "name": "GET_CONNECTION_LOCKS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetConnectionLocksRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "connectionId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:77",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 77,
+      "name": "GET_CONNECTION_LOCKS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetConnectionLocksResponse",
+      "result": "list<ObjectLock>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 78,
+      "name": "GET_SESSION_LOCKS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetSessionLocksRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "infoBaseId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "sid",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:79",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "блокировки сеанса: ответ 79 - список блокировок только этого сеанса (проверено на живом сеансе, при версиях 3..16 раскладка не меняется)"
+    },
+    {
+      "opcode": 79,
+      "name": "GET_SESSION_LOCKS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetSessionLocksResponse",
+      "result": "list<ObjectLock>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 81,
+      "name": "APPLY_ASSIGNMENT_RULES_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "ApplyAssignmentRulesRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "full",
+          "type": "int32",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 82,
+      "name": "REG_ASSIGNMENT_RULE_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "RegAssignmentRuleRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "info",
+          "type": "ref:AssignmentRuleInfo",
+          "since": 10
+        },
+        {
+          "name": "position",
+          "type": "int32",
+          "since": 10
+        }
+      ],
+      "response": "opcode:83",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "position — позиция правила в списке (int32)"
+    },
+    {
+      "opcode": 83,
+      "name": "REG_ASSIGNMENT_RULE_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "RegAssignmentRuleResponse",
+      "result": "uuid",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request",
+      "note": "UUID правила"
+    },
+    {
+      "opcode": 84,
+      "name": "UNREG_ASSIGNMENT_RULE_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "UnregAssignmentRuleRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "ruleId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 85,
+      "name": "GET_ASSIGNMENT_RULES_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetAssignmentRulesRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:86",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 86,
+      "name": "GET_ASSIGNMENT_RULES_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetAssignmentRulesResponse",
+      "result": "list<AssignmentRuleInfo>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 87,
+      "name": "GET_ASSIGNMENT_RULE_INFO_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetAssignmentRuleInfoRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "ruleId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:88",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 88,
+      "name": "GET_ASSIGNMENT_RULE_INFO_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetAssignmentRuleInfoResponse",
+      "result": "AssignmentRuleInfo",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 89,
+      "name": "GET_SECURITY_PROFILES_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetSecurityProfilesRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:90",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 90,
+      "name": "GET_SECURITY_PROFILES_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetSecurityProfilesResponse",
+      "result": "list<SecurityProfile>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 91,
+      "name": "CREATE_SECURITY_PROFILE_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "CreateSecurityProfileRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "profile",
+          "type": "ref:SecurityProfile",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 92,
+      "name": "DROP_SECURITY_PROFILE_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "DropSecurityProfileRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 93,
+      "name": "GET_VIRTUAL_DIRECTORIES_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetVirtualDirectoriesRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "opcode:94",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 94,
+      "name": "GET_VIRTUAL_DIRECTORIES_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetVirtualDirectoriesResponse",
+      "result": "list<SecurityProfileVirtualDirectory>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 95,
+      "name": "CREATE_VIRTUAL_DIRECTORY_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "CreateVirtualDirectoryRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "directory",
+          "type": "ref:SecurityProfileVirtualDirectory",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 96,
+      "name": "DROP_VIRTUAL_DIRECTORY_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "DropVirtualDirectoryRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "alias",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 97,
+      "name": "GET_COM_CLASSES_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetComClassesRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "opcode:98",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 98,
+      "name": "GET_COM_CLASSES_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetComClassesResponse",
+      "result": "list<SecurityProfileCOMClass>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 99,
+      "name": "CREATE_COM_CLASS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "CreateComClassRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "comClass",
+          "type": "ref:SecurityProfileCOMClass",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 100,
+      "name": "DROP_COM_CLASS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "DropComClassRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 101,
+      "name": "GET_ALLOWED_ADDINS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetAllowedAddInsRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "opcode:102",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 102,
+      "name": "GET_ALLOWED_ADDINS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetAllowedAddInsResponse",
+      "result": "list<SecurityProfileAddIn>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 103,
+      "name": "CREATE_ALLOWED_ADDIN_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "CreateAllowedAddInRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "addIn",
+          "type": "ref:SecurityProfileAddIn",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 104,
+      "name": "DROP_ALLOWED_ADDIN_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "DropAllowedAddInRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 105,
+      "name": "GET_EXTERNAL_MODULES_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetExternalModulesRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "opcode:106",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 106,
+      "name": "GET_EXTERNAL_MODULES_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetExternalModulesResponse",
+      "result": "list<SecurityProfileExternalModule>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 107,
+      "name": "CREATE_EXTERNAL_MODULE_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "CreateExternalModuleRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "module",
+          "type": "ref:SecurityProfileExternalModule",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 108,
+      "name": "DROP_EXTERNAL_MODULE_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "DropExternalModuleRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 109,
+      "name": "GET_ALLOWED_APPLICATIONS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetAllowedApplicationsRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "opcode:110",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 110,
+      "name": "GET_ALLOWED_APPLICATIONS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetAllowedApplicationsResponse",
+      "result": "list<SecurityProfileApplication>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 111,
+      "name": "CREATE_ALLOWED_APPLICATION_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "CreateAllowedApplicationRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "app",
+          "type": "ref:SecurityProfileApplication",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 112,
+      "name": "DROP_ALLOWED_APPLICATION_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "DropAllowedApplicationRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 113,
+      "name": "GET_INTERNET_RESOURCES_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInternetResourcesRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "opcode:114",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 114,
+      "name": "GET_INTERNET_RESOURCES_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetInternetResourcesResponse",
+      "result": "list<SecurityProfileInternetResource>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 115,
+      "name": "CREATE_INTERNET_RESOURCE_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "CreateInternetResourceRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "resource",
+          "type": "ref:SecurityProfileInternetResource",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 116,
+      "name": "DROP_INTERNET_RESOURCE_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "DropInternetResourceRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "spName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 117,
+      "name": "INTERRUPT_SESSION_CURRENT_SERVER_CALL_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "InterruptSessionCurrentServerCallRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "sid",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "message",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 118,
+      "name": "GET_RESOURCE_COUNTERS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetResourceConsumptionCountersRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:119",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 119,
+      "name": "GET_RESOURCE_COUNTERS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetResourceConsumptionCountersResponse",
+      "result": "list<ResourceConsumptionCounter>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 120,
+      "name": "GET_RESOURCE_COUNTER_INFO_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetResourceConsumptionCounterInfoRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "counterName",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "opcode:121",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 121,
+      "name": "GET_RESOURCE_COUNTER_INFO_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetResourceConsumptionCounterInfoResponse",
+      "result": "ResourceConsumptionCounter",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 122,
+      "name": "REG_RESOURCE_COUNTER_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "RegResourceConsumptionCounterRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "counter",
+          "type": "ref:ResourceConsumptionCounter",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 123,
+      "name": "UNREG_RESOURCE_COUNTER_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "UnregResourceConsumptionCounterRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "counterName",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 124,
+      "name": "GET_RESOURCE_LIMITS_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetResourceConsumptionLimitsRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        }
+      ],
+      "response": "opcode:125",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 125,
+      "name": "GET_RESOURCE_LIMITS_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetResourceConsumptionLimitsResponse",
+      "result": "list<ResourceConsumptionLimit>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 126,
+      "name": "GET_RESOURCE_LIMIT_INFO_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetResourceConsumptionLimitInfoRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "limitName",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "opcode:127",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 127,
+      "name": "GET_RESOURCE_LIMIT_INFO_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetResourceConsumptionLimitInfoResponse",
+      "result": "ResourceConsumptionLimit",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 128,
+      "name": "REG_RESOURCE_LIMIT_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "RegResourceConsumptionLimitRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "limit",
+          "type": "ref:ResourceConsumptionLimit",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 129,
+      "name": "UNREG_RESOURCE_LIMIT_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "UnregResourceConsumptionLimitRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "limitName",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 130,
+      "name": "GET_COUNTER_VALUES_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetResourceConsumptionCounterValuesRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "counterName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "object",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "opcode:131",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 131,
+      "name": "GET_COUNTER_VALUES_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetResourceConsumptionCounterValuesResponse",
+      "result": "list<ResourceConsumptionCounterValue>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 132,
+      "name": "CLEAR_COUNTER_VALUE_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "ClearResourceConsumptionCounterAccumulatedValuesRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "counterName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "object",
+          "type": "string",
+          "since": 10,
+          "source": "pyrac-16.0"
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "в Java formatMessage записывает counterName дважды, поле object не передаётся (ошибка клиента); реальный запрос: clusterId, counterName, object (по pyrac и rac)"
+    },
+    {
+      "opcode": 133,
+      "name": "GET_COUNTER_ACCUMULATED_VALUES_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetResourceConsumptionCounterAccumulatedValuesRequest",
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 10
+        },
+        {
+          "name": "counterName",
+          "type": "string",
+          "since": 10
+        },
+        {
+          "name": "object",
+          "type": "string",
+          "since": 10
+        }
+      ],
+      "response": "opcode:134",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing"
+    },
+    {
+      "opcode": 134,
+      "name": "GET_COUNTER_ACCUMULATED_VALUES_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetResourceConsumptionCounterAccumulatedValuesResponse",
+      "result": "list<ResourceConsumptionCounterValue>",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 135,
+      "name": "GET_AGENT_VERSION_REQUEST",
+      "direction": "request",
+      "since": 10,
+      "since_source": "java-inferred",
+      "java_class": "GetAgentVersionRequest",
+      "fields": [],
+      "response": "opcode:136",
+      "auth": {
+        "requires": [],
+        "note": "без аутентификации"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "в Java при версиях 4.0..8.0 версия платформы берётся из таблицы без запроса (4.0=8.3.11, 5.0=8.3.12, 6.0=8.3.13, 7.0=8.3.14, 8.0=8.3.15); для остальных отправляется это сообщение"
+    },
+    {
+      "opcode": 136,
+      "name": "GET_AGENT_VERSION_RESPONSE",
+      "direction": "response",
+      "since": 10,
+      "since_source": "java-1.6.8",
+      "java_class": "GetAgentVersionResponse",
+      "result": "string",
+      "pyrac16": "see-request",
+      "pyrac10": "see-request"
+    },
+    {
+      "opcode": 137,
+      "name": "GET_SERVICE_SETTING_INFO_REQUEST",
+      "direction": "request",
+      "since": 16,
+      "since_source": "pyrac-observed",
+      "since_confirmed": false,
+      "java_class": null,
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "settingId",
+          "type": "uuid",
+          "since": 16
+        }
+      ],
+      "response": "opcode:138",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "service-setting info; сообщения нет в Java 1.6.8; RAS 8.5.1 принимает его при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 138,
+      "name": "GET_SERVICE_SETTING_INFO_RESPONSE",
+      "direction": "response",
+      "since": 16,
+      "since_source": "pyrac-observed",
+      "since_confirmed": false,
+      "java_class": null,
+      "result": "ServiceSetting",
+      "pyrac16": "see-request",
+      "pyrac10": "missing",
+      "note": "сообщения нет в Java 1.6.8; RAS 8.5.1 принимает его при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 139,
+      "name": "GET_SERVICE_SETTINGS_REQUEST",
+      "direction": "request",
+      "since": 16,
+      "since_source": "pyrac-observed",
+      "since_confirmed": false,
+      "java_class": null,
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 16
+        }
+      ],
+      "response": "opcode:140",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "service-setting list; сообщения нет в Java 1.6.8; RAS 8.5.1 принимает его при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 140,
+      "name": "GET_SERVICE_SETTINGS_RESPONSE",
+      "direction": "response",
+      "since": 16,
+      "since_source": "pyrac-observed",
+      "since_confirmed": false,
+      "java_class": null,
+      "result": "list<ServiceSetting>",
+      "pyrac16": "see-request",
+      "pyrac10": "missing",
+      "note": "сообщения нет в Java 1.6.8; RAS 8.5.1 принимает его при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 141,
+      "name": "REG_SERVICE_SETTING_REQUEST",
+      "direction": "request",
+      "since": 16,
+      "since_source": "pyrac-observed",
+      "since_confirmed": false,
+      "java_class": null,
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "setting",
+          "type": "ref:ServiceSetting",
+          "since": 16
+        }
+      ],
+      "response": "opcode:142",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "service-setting insert/update (нулевой UUID — новая запись); сообщения нет в Java 1.6.8; RAS 8.5.1 принимает его при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 142,
+      "name": "REG_SERVICE_SETTING_RESPONSE",
+      "direction": "response",
+      "since": 16,
+      "since_source": "pyrac-observed",
+      "since_confirmed": false,
+      "java_class": null,
+      "result": "uuid",
+      "pyrac16": "see-request",
+      "pyrac10": "missing",
+      "note": "сообщения нет в Java 1.6.8; RAS 8.5.1 принимает его при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 143,
+      "name": "UNREG_SERVICE_SETTING_REQUEST",
+      "direction": "request",
+      "since": 16,
+      "since_source": "pyrac-observed",
+      "since_confirmed": false,
+      "java_class": null,
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "settingId",
+          "type": "uuid",
+          "since": 16
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "service-setting remove; сообщения нет в Java 1.6.8; RAS 8.5.1 принимает его при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 144,
+      "name": "APPLY_SERVICE_SETTINGS_REQUEST",
+      "direction": "request",
+      "since": 16,
+      "since_source": "pyrac-observed",
+      "since_confirmed": false,
+      "java_class": null,
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 16
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "service-setting apply; сообщения нет в Java 1.6.8; RAS 8.5.1 принимает его при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 145,
+      "name": "GET_SERVICE_DATA_DIRS_FOR_TRANSFER_REQUEST",
+      "direction": "request",
+      "since": 16,
+      "since_source": "pyrac-observed",
+      "since_confirmed": false,
+      "java_class": null,
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "serviceName",
+          "type": "string",
+          "since": 16
+        }
+      ],
+      "response": "opcode:146",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "service-setting get-service-data-dirs-for-transfer; сообщения нет в Java 1.6.8; RAS 8.5.1 принимает его при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 146,
+      "name": "GET_SERVICE_DATA_DIRS_FOR_TRANSFER_RESPONSE",
+      "direction": "response",
+      "since": 16,
+      "since_source": "pyrac-observed",
+      "since_confirmed": false,
+      "java_class": null,
+      "result": "list<ServiceDataDirForTransfer>",
+      "pyrac16": "see-request",
+      "pyrac10": "missing",
+      "note": "сообщения нет в Java 1.6.8; RAS 8.5.1 принимает его при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 147,
+      "name": "GET_SERVICE_SETTING_BY_PARAMS_REQUEST",
+      "direction": "request",
+      "since": 16,
+      "since_source": "live-ras-8.5.1",
+      "since_confirmed": false,
+      "java_class": null,
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "serviceName",
+          "type": "string",
+          "since": 16
+        },
+        {
+          "name": "infoBaseName",
+          "type": "string",
+          "since": 16
+        }
+      ],
+      "response": "opcode:148",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "настройка сервиса по имени сервиса и имени ИБ (в rac нет); расшифровано по живому RAS: ответ - запись ServiceSetting, для отсутствующей настройки - ошибка «Настройка сервиса с указанными параметрами не найдена»; RAS 8.5.1 принимает сообщение при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 148,
+      "name": "GET_SERVICE_SETTING_BY_PARAMS_RESPONSE",
+      "direction": "response",
+      "since": 16,
+      "since_source": "live-ras-8.5.1",
+      "since_confirmed": false,
+      "java_class": null,
+      "result": "ServiceSetting",
+      "pyrac16": "see-request",
+      "pyrac10": "missing",
+      "note": "запись ServiceSetting (проверено на живой настройке); RAS 8.5.1 принимает сообщение при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 149,
+      "name": "GET_SERVICE_SETTING_FLAG_149_REQUEST",
+      "direction": "request",
+      "since": 16,
+      "since_source": "live-ras-8.5.1",
+      "since_confirmed": false,
+      "java_class": null,
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "settingId",
+          "type": "uuid",
+          "since": 16
+        }
+      ],
+      "response": "opcode:150",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "missing",
+      "pyrac10": "missing",
+      "note": "в rac нет; ответ - один булев байт: у живой настройки сервиса false до service-setting apply и true после него (совпадает с полем active записи ServiceSetting); для несуществующей настройки - ошибка «Настройка сервиса с указанным ID не найдена»; RAS 8.5.1 принимает сообщение при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница; проверено на двух настройках: до service-setting apply 0, после 1 при любой смене каталога"
+    },
+    {
+      "opcode": 150,
+      "name": "GET_SERVICE_SETTING_FLAG_149_RESPONSE",
+      "direction": "response",
+      "since": 16,
+      "since_source": "live-ras-8.5.1",
+      "since_confirmed": false,
+      "java_class": null,
+      "result": "bool",
+      "pyrac16": "see-request",
+      "pyrac10": "missing",
+      "note": "булево значение (см. запрос 149); RAS 8.5.1 принимает сообщение при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 151,
+      "name": "GET_SERVICE_SETTING_FLAG_151_REQUEST",
+      "direction": "request",
+      "since": 16,
+      "since_source": "live-ras-8.5.1",
+      "since_confirmed": false,
+      "java_class": null,
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "serverId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "settingId",
+          "type": "uuid",
+          "since": 16
+        }
+      ],
+      "response": "opcode:152",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "missing",
+      "pyrac10": "missing",
+      "note": "в rac нет; раскладка запроса та же, что у 149; ответ - один булев байт, во всех проверенных состояниях (новая настройка, после apply, после смены каталога активной настройки, настройки двух ИБ) 0: назначение не установлено; RAS 8.5.1 принимает сообщение при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 152,
+      "name": "GET_SERVICE_SETTING_FLAG_151_RESPONSE",
+      "direction": "response",
+      "since": 16,
+      "since_source": "live-ras-8.5.1",
+      "since_confirmed": false,
+      "java_class": null,
+      "result": "bool",
+      "pyrac16": "see-request",
+      "pyrac10": "missing",
+      "note": "булево значение (см. запрос 151); назначение не установлено; RAS 8.5.1 принимает сообщение при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 153,
+      "name": "GET_BINARY_DATA_STORAGES_REQUEST",
+      "direction": "request",
+      "since": 16,
+      "since_source": "pyrac-observed",
+      "since_confirmed": false,
+      "java_class": null,
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "infoBaseId",
+          "type": "uuid",
+          "since": 16
+        }
+      ],
+      "response": "opcode:160",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "optional": [
+          "infobase"
+        ],
+        "note": "тип 9 и тип 10 (администратор ИБ: UUID кластера, имя, пароль; в Java первый UUID назван workingProcessId)"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "binary-data-storage list/info (info отправляет тот же запрос); сообщения нет в Java 1.6.8; RAS 8.5.1 принимает его при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 160,
+      "name": "GET_BINARY_DATA_STORAGES_RESPONSE",
+      "direction": "response",
+      "since": 16,
+      "since_source": "pyrac-observed",
+      "since_confirmed": false,
+      "java_class": null,
+      "result": "list<BinaryDataStorageInfo>",
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "записи BinaryDataStorageInfo; без включённого хранилища список пустой; RAS 8.5.1 принимает сообщение при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 161,
+      "name": "BINARY_DATA_STORAGE_OPERATION_REQUEST",
+      "direction": "request",
+      "since": 16,
+      "since_source": "live-ras-8.5.1",
+      "since_confirmed": false,
+      "java_class": null,
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "infoBaseId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "storageId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "reserved",
+          "type": "int32",
+          "since": 16
+        },
+        {
+          "name": "operation",
+          "type": "uint8",
+          "since": 16
+        },
+        {
+          "name": "argument",
+          "type": "string",
+          "since": 16
+        }
+      ],
+      "response": "opcode:162",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "optional": [
+          "infobase"
+        ],
+        "note": "тип 9 и тип 10 (администратор ИБ: UUID кластера, имя, пароль)"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "операции встроенного хранилища (rac binary-data-storage ...): operation 0 - очистка неиспользуемого места (argument - универсальная дата десятичным числом 1/10000 с от 0001-01-01), 1 - создание резервной копии, 2 - загрузка копии (argument - путь на сервере; для дифференциальной - путь полной копии, перевод строки и путь дифференциальной); ответ - идентификатор операции, завершение узнаётся запросом 163; не существующая на сервере копия при загрузке отклоняется ошибкой сразу; RAS 8.5.1 принимает сообщение при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 162,
+      "name": "BINARY_DATA_STORAGE_OPERATION_RESPONSE",
+      "direction": "response",
+      "since": 16,
+      "since_source": "live-ras-8.5.1",
+      "since_confirmed": false,
+      "java_class": null,
+      "result": "uuid",
+      "pyrac16": "see-request",
+      "pyrac10": "missing",
+      "note": "идентификатор запущенной операции (16 байт); RAS 8.5.1 принимает сообщение при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 163,
+      "name": "BINARY_DATA_STORAGE_OPERATION_STATE_REQUEST",
+      "direction": "request",
+      "since": 16,
+      "since_source": "live-ras-8.5.1",
+      "since_confirmed": false,
+      "java_class": null,
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "infoBaseId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "operationId",
+          "type": "uuid",
+          "since": 16
+        }
+      ],
+      "response": "opcode:164",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "optional": [
+          "infobase"
+        ],
+        "note": "тип 9 и тип 10 (администратор ИБ: UUID кластера, имя, пароль)"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "завершена ли операция хранилища (rac опрашивает после 161 до ответа 1); после первого ответа 1 операция забывается, повторный запрос отвечает ошибкой «Сеанс с указанным идентификатором не найден»; ошибка выполнения операции (например, неверный путь копии) по этому ответу не видна; RAS 8.5.1 принимает сообщение при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 164,
+      "name": "BINARY_DATA_STORAGE_OPERATION_STATE_RESPONSE",
+      "direction": "response",
+      "since": 16,
+      "since_source": "live-ras-8.5.1",
+      "since_confirmed": false,
+      "java_class": null,
+      "result": "bool",
+      "pyrac16": "see-request",
+      "pyrac10": "missing",
+      "note": "1 - операция завершена, 0 - ещё выполняется; RAS 8.5.1 принимает сообщение при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    },
+    {
+      "opcode": 165,
+      "name": "TURN_OFF_WORKING_PROCESS_REQUEST",
+      "direction": "request",
+      "since": 16,
+      "since_source": "pyrac-observed",
+      "since_confirmed": false,
+      "java_class": null,
+      "fields": [
+        {
+          "name": "clusterId",
+          "type": "uuid",
+          "since": 16
+        },
+        {
+          "name": "processId",
+          "type": "uuid",
+          "since": 16
+        }
+      ],
+      "response": "void",
+      "auth": {
+        "requires": [
+          "cluster"
+        ],
+        "note": "тип 9: UUID кластера, имя, пароль"
+      },
+      "pyrac16": "implemented",
+      "pyrac10": "missing",
+      "note": "process turn-off (ACK приходит и для несуществующего процесса); сообщения нет в Java 1.6.8; RAS 8.5.1 принимает его при любой версии конечной точки 3.0..16.0 (проверено), поэтому версия появления установлена лишь как верхняя граница"
+    }
+  ]
+}
