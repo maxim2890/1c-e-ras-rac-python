@@ -28,7 +28,6 @@ INFOBASES_TAG = '59654aab-c9d2-49e0-ab3b-32f2a3595c5b'
 SESSIONS_TAG = 'a3b238cc-3fa5-406b-a1eb-5347bcae06e2'
 UUID_TAG = 'ae135932-4f94-44df-92c1-c91f15a92848'
 BASELINE_VERSION = '8.3.22.2143'
-KNOWN_PROTECTED_VERSIONS = frozenset(('8.3.27.2342',))
 
 
 @dataclass(frozen=True)
@@ -197,10 +196,6 @@ class RemoteError(ValueError):
     """A native exception reply; never interpret it as a successful result."""
 
 
-class UnsupportedNativeSecurity(ValueError):
-    """The agent requires a newer protected bootstrap not yet implemented."""
-
-
 class NativeVersionMismatch(ValueError):
     """The plaintext profile is valid but its declared platform version differs."""
 
@@ -283,7 +278,7 @@ class Channel:
         try:
             self.connection.sendall(b'\xef\xbb\xbf' + text.encode('utf-8') + END)
             return self.receive()
-        except (RemoteError, NativeVersionMismatch, UnsupportedNativeSecurity):
+        except (RemoteError, NativeVersionMismatch):
             raise
         except (OSError, ValueError) as exc:
             raise ValueError(stage + ': ' + str(exc)) from exc
@@ -292,7 +287,7 @@ class Channel:
         try:
             self.connection.sendall(encode_binary_values(values) + END)
             return self.receive()
-        except (RemoteError, NativeVersionMismatch, UnsupportedNativeSecurity):
+        except (RemoteError, NativeVersionMismatch):
             raise
         except (OSError, ValueError) as exc:
             raise ValueError(stage + ': ' + str(exc)) from exc
@@ -456,8 +451,10 @@ def decode_sessions(reply, expected_infobase):
 
 def decode_settings(reply, expected_id, include_sensitive=False):
     record = tagged(read_value(reply, 1, 'worker settings'), SETTINGS_TAG)
-    if not isinstance(record, list) or len(record) != 19:
-        raise ValueError('Unsupported full infobase settings record')
+    if not isinstance(record, list) or len(record) < 19:
+        raise ValueError('Unsupported full infobase settings record shape: '
+                         + type(record).__name__ + ', length '
+                         + str(len(record) if isinstance(record, list) else '?'))
     if str(uuid.UUID(record[1])) != expected_id:
         raise ValueError('Worker returned a different infobase')
     restrictions = record[10]
@@ -490,6 +487,15 @@ def decode_settings(reply, expected_id, include_sensitive=False):
                    'denied-from': native_date(restrictions[1]),
                    'denied-to': native_date(restrictions[2]),
                    'denied-message': native_string(restrictions[3])})
+    if len(record) >= 26:
+        # Correlated against one-setting-at-a-time changes in the disposable
+        # 8.3.27.2342 infobase and native RAS labels.
+        result.update({
+            'disable-local-speech-to-text': native_bool(record[22]),
+            'configuration-unload-delay-by-working-process-without-active-users': native_int32(record[23]),
+            'minimum-scheduled-jobs-start-period-without-active-users': native_int32(record[24]),
+            'maximum-scheduled-jobs-start-shift-without-active-users': native_int32(record[25]),
+        })
     if include_sensitive:
         # Preserve exact native values. The server may return a mask/sentinel
         # instead of a recoverable password; do not reinterpret that value.
@@ -501,11 +507,16 @@ def decode_settings(reply, expected_id, include_sensitive=False):
         result['unmapped-native-fields'] = {
             '10.4': restrictions[4], '10.5': restrictions[5],
             '10.6': restrictions[6], '13': record[13], '17': record[17]}
+        result['native-record-field-count'] = len(record)
+        result['unmapped-native-fields'].update({
+            str(index): record[index] for index in range(19, len(record))
+            if index not in (22, 23, 24, 25) or len(record) < 26})
     return result
 
 
 def worker_settings(address, infobase_id, timeout, host_override=None,
-                    cluster_user='', cluster_password='', include_sensitive=False):
+                    cluster_user='', cluster_password='', include_sensitive=False,
+                    platform_version=BASELINE_VERSION):
     try:
         advertised_host, port_text = address.rsplit(':', 1)
         advertised_host = advertised_host.strip('[]'); port = int(port_text)
@@ -517,7 +528,8 @@ def worker_settings(address, infobase_id, timeout, host_override=None,
     try:
         with socket.create_connection((host, port), timeout) as connection:
             channel = Channel(connection, timeout); channel.receive(greeting=True)
-            creation = channel.request(creation_request(counter, class_id=WORKER_CLASS),
+            creation = channel.request(creation_request(counter, platform_version,
+                                                        class_id=WORKER_CLASS),
                                        stage='worker creation')
             if (not isinstance(creation, list) or len(creation) != 2 or creation[1] != 0
                     or not isinstance(creation[0], list) or len(creation[0]) < 4
@@ -529,8 +541,10 @@ def worker_settings(address, infobase_id, timeout, host_override=None,
             object_id = str(uuid.UUID(reference[0])); prefix = '{0,' + object_id + ','
             capability = channel.request(prefix + str(counter + 1) + ',1,' + WORKER_INTERFACE + '}', stage='worker interface')
             if (len(capability) != 1 or not isinstance(capability[0], list)
-                    or len(capability[0]) != 3 or capability[0][0] != 1 or capability[0][2] != 16):
-                raise ValueError('Observed 16-method worker interface required')
+                    or len(capability[0]) != 3 or capability[0][0] != 1
+                    or type(capability[0][2]) is not int or capability[0][2] < 16):
+                raise ValueError('Worker interface requires at least 16 methods: '
+                                 + repr(capability)[:300])
             for offset, method in ((2, 11), (3, 0)):
                 user, password = ((cluster_user, cluster_password) if method == 11 else ('', ''))
                 auth = (prefix + str(counter + offset) + ',4,' + WORKER_INTERFACE + ','
@@ -686,11 +700,12 @@ def _list_clusters_profile(host, port=1540, timeout=10, infobases=False, details
                         raise ValueError('Expected server-directed worker address')
                     address = native_string(redirect[1])
                     base.update(worker_settings(address, base['infobase'], timeout, worker_host,
-                                                cluster_user, cluster_password, include_sensitive))
+                                                cluster_user, cluster_password, include_sensitive,
+                                                platform_version))
         return {'endpoint': {'host': host, 'port': port},
                 'experimental_profile': 'plaintext-' + platform_version,
                 'clusters': clusters, 'capability_reply_raw': capability,
-                'limitations': 'The plaintext profile is live validated on 8.3.22.2143 and cluster discovery is validated through 8.3.27.2214. Later protected-bootstrap profiles are not implemented. Session listing reports active sessions, not the infobase application user directory. Credential-bearing and unmapped native settings require --include-sensitive; a returned password field may be a server-provided mask rather than a recoverable password. Native session fields remain partly uninterpreted. Server-agent administrator authentication remains unsupported.'}
+                'limitations': 'The plaintext profile is live validated on 8.3.22.2143 and 8.3.27.2342, including modern cluster credentials and one full infobase settings record. Native RAS uses an additional public-key offer on 8.3.27.2342. An empty modern session list was validated; nonempty modern session records were not. Session listing does not expose the infobase application user directory. Credential-bearing and unmapped native settings require --include-sensitive; a returned password field may be a server-provided mask rather than a recoverable password. Native session fields remain partly uninterpreted. Server-agent administrator authentication remains unsupported.'}
 
 
 def list_clusters(host, port=1540, timeout=10, infobases=False, details=False, sessions=False, worker_host=None,
@@ -707,16 +722,8 @@ def list_clusters(host, port=1540, timeout=10, infobases=False, details=False, s
     except NativeVersionMismatch as exc:
         if platform_version != 'auto':
             raise
-        try:
-            return _list_clusters_profile(host, port, timeout,
-                                          platform_version=exc.server_version, **options)
-        except (ConnectionError, RemoteError, ValueError) as retry:
-            if isinstance(retry, NativeVersionMismatch):
-                raise
-            raise UnsupportedNativeSecurity(
-                'Agent version ' + exc.server_version + ' does not accept the observed '
-                'plaintext profile after version discovery. It may require the protected '
-                'public-key bootstrap; use ras_client.py through RAS.') from None
+        return _list_clusters_profile(host, port, timeout,
+                                      platform_version=exc.server_version, **options)
 
 
 def _fingerprint_plaintext(host, port, timeout, platform_version):
@@ -763,8 +770,7 @@ def fingerprint_agent(host, port=1540, timeout=10, platform_version='auto'):
         except NativeVersionMismatch:
             raise
         except (ConnectionError, RemoteError, ValueError):
-            family = ('protected-public-key' if exc.server_version in KNOWN_PROTECTED_VERSIONS
-                      else 'unknown-native-profile')
+            family = 'unknown-native-profile'
             return {'endpoint': {'host': host, 'port': port},
                     'platform-version': exc.server_version, 'family': family,
                     'profile': None, 'interface-methods': None,
